@@ -1,32 +1,10 @@
-import { GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
-import { MongoDBAtlasVectorSearch } from '@langchain/mongodb';
+import BaseVectorService from './baseVectorService.js';
 import logger from '../utils/logger.js';
-import { getCollection } from '../utils/dbHelper.js';
 
 /**
  * Service for performing similarity search
  */
-class SearchService {
-  constructor() {
-    this.embeddings = new GoogleGenerativeAIEmbeddings({
-      modelName: 'text-embedding-004', // Output dimensions: 768
-      apiKey: process.env.GOOGLE_API_KEY,
-    });
-  }
-
-  /**
-   * Initialize vector store
-   */
-  async getVectorStore() {
-    const collection = await getCollection('vector_demo');
-    return new MongoDBAtlasVectorSearch(this.embeddings, {
-      collection: collection,
-      indexName: 'vector_index', // Must match the index name created in Atlas UI
-      textKey: 'text', // Field where the raw text is stored
-      embeddingKey: 'embedding', // Field where the vector is stored
-    });
-  }
-
+class SearchService extends BaseVectorService {
   /**
    * Normalize similarity score
    * Handles both similarity scores (0-1, higher = better) and distance scores (lower = better)

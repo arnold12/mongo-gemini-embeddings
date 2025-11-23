@@ -1,41 +1,11 @@
-import { GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
-import { MongoDBAtlasVectorSearch } from '@langchain/mongodb';
 import { Document } from '@langchain/core/documents';
+import BaseVectorService from './baseVectorService.js';
 import logger from '../utils/logger.js';
-import { getCollection } from '../utils/dbHelper.js';
 
 /**
  * Service for creating and managing embeddings
  */
-class EmbeddingsService {
-  constructor() {
-    this.embeddings = new GoogleGenerativeAIEmbeddings({
-      modelName: 'text-embedding-004', // Output dimensions: 768
-      apiKey: process.env.GOOGLE_API_KEY,
-    });
-  }
-
-  /**
-   * Initialize vector store
-   */
-  async getVectorStore() {
-    const collection = await getCollection('vector_demo');
-
-    // Log collection details including database name
-    logger.logInfo('Initializing vector store', {
-      collectionName: collection.collectionName,
-      databaseName: collection.db.databaseName,
-      hasClient: !!collection.db.client,
-    });
-
-    return new MongoDBAtlasVectorSearch(this.embeddings, {
-      collection: collection,
-      indexName: 'vector_index', // Must match the index name created in Atlas UI
-      textKey: 'text', // Field where the raw text will be stored
-      embeddingKey: 'embedding', // Field where the vector will be stored
-    });
-  }
-
+class EmbeddingsService extends BaseVectorService {
   /**
    * Create embeddings for documents and store them in MongoDB
    * @param {Array} documents - Array of documents with content and metadata

@@ -8,6 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "setup-index": "node scripts/setup_search_index.js",
+    "lint": "eslint .",
+    "prepare": "husky",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -26,8 +28,14 @@
     "express": "~4.18.2",
     "joi": "~17.11.0",
     "langchain": "~1.0.6",
-    "mongoose": "~8.0.3",
     "mongodb": "~7.0.0",
+    "mongoose": "~8.0.3",
     "winston": "~3.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "~9.39.1",
+    "eslint": "~9.39.1",
+    "globals": "~16.5.0",
+    "husky": "~9.1.7"
   }
 }
