@@ -1,7 +1,6 @@
 
 import { connectDB, disconnectDB } from '../config/database.js';
 import { getCollection } from '../utils/dbHelper.js';
-import logger from '../utils/logger.js';
 import dotenv from 'dotenv';
 
 dotenv.config();

@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-const { combine, timestamp, errors, json, printf } = winston.format;
+const { combine, timestamp, errors, json } = winston.format;
 
 // Custom format for JSON logging
 const jsonFormat = combine(

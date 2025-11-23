@@ -47,7 +47,7 @@ app.use((req, res) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   logger.logError(err, {
     requestId: req.id,
     method: req.method,
