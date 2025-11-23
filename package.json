@@ -1,0 +1,33 @@
+{
+  "name": "mongo-gemini-embeddings",
+  "version": "1.0.0",
+  "description": "MongoDB Atlas Vector Search with Google Gemini Embeddings API",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "setup-index": "node scripts/setup_search_index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongodb",
+    "embeddings",
+    "vector-search",
+    "gemini",
+    "express"
+  ],
+  "author": "Arnold Machado <machadoarnold@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/google-genai": "~1.0.3",
+    "@langchain/mongodb": "~1.0.0",
+    "dotenv": "~17.2.3",
+    "express": "~4.18.2",
+    "joi": "~17.11.0",
+    "langchain": "~1.0.6",
+    "mongoose": "~8.0.3",
+    "mongodb": "~7.0.0",
+    "winston": "~3.11.0"
+  }
+}
