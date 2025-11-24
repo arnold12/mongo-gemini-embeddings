@@ -1,5 +1,6 @@
 import { Document } from '@langchain/core/documents';
 import BaseVectorService from './baseVectorService.js';
+import chunkingService from './chunkingService.js';
 import logger from '../utils/logger.js';
 
 /**
@@ -26,17 +27,22 @@ class EmbeddingsService extends BaseVectorService {
       // Initialize vector store
       const vectorStore = await this.getVectorStore();
 
+      // Chunk documents
+      const chunkedDocuments = await chunkingService.chunkDocuments(langchainDocuments);
+
       // Generate embeddings and store in MongoDB
       logger.logInfo('Generating embeddings and storing documents', {
         requestId,
-        documentCount: documents.length,
+        originalCount: documents.length,
+        chunkedCount: chunkedDocuments.length,
       });
 
-      await vectorStore.addDocuments(langchainDocuments);
+      await vectorStore.addDocuments(chunkedDocuments);
 
       logger.logInfo('Documents stored successfully', {
         requestId,
-        documentCount: documents.length,
+        originalCount: documents.length,
+        chunkedCount: chunkedDocuments.length,
       });
 
       return {
