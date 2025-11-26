@@ -1,6 +1,6 @@
 // src/services/preprocessingService.js
 import he from "he"; // For fixing HTML entities
-import { JSDOM } from "jsdom"; // For HTML cleanup and extraction
+// import { JSDOM } from "jsdom"; // For HTML cleanup and extraction
 
 class PreprocessingService {
   /**
@@ -9,11 +9,15 @@ class PreprocessingService {
    */
   preprocessDocuments(documents) {
     return documents.map((doc) => {
-      const text = typeof doc === "string" ? doc : doc.text;
+      const isString = typeof doc === "string";
+      const text = isString ? doc : doc.content || doc.text || "";
       const cleanedText = this.cleanText(text);
+
+      if (isString) return cleanedText;
+
       return {
         ...doc,
-        text: cleanedText,
+        content: cleanedText,
       };
     });
   }
@@ -40,13 +44,9 @@ class PreprocessingService {
   }
 
   stripHTML(text) {
-    try {
-      const dom = new JSDOM(text);
-      return dom.window.document.body.textContent || "";
-    } catch (error) {
-      console.error("Error stripping HTML:", error);
-      return text.replace(/<[^>]+>/g, " ");
-    }
+    // Use regex to replace tags with spaces to preserve word boundaries
+    // JSDOM textContent can merge words (e.g. <div>A</div><div>B</div> -> AB)
+    return text.replace(/<[^>]+>/g, " ");
   }
 
   normalizeBullets(text) {
@@ -64,12 +64,13 @@ class PreprocessingService {
     output = output.replace(/Page\s+\d+/gi, "");
 
     // Remove headers like "Company Confidential", "Footer text", etc.
+    // Use multiline anchors to avoid matching words in the middle of sentences
     const boilerplatePatterns = [
       /copyright\s*\d{4}/gi,
       /all rights reserved/gi,
       /confidential/gi,
-      /footer[:\s].*/gi,
-      /header[:\s].*/gi,
+      /^footer[:\s].*$/gim,
+      /^header[:\s].*$/gim,
     ];
 
     boilerplatePatterns.forEach((pattern) => {
@@ -82,8 +83,7 @@ class PreprocessingService {
   normalizeWhitespace(text) {
     return text
       .replace(/\r/g, "")
-      .replace(/\t+/g, " ")
-      .replace(/ +/g, " ") // multiple → one space
+      .replace(/[\t\u00A0 ]+/g, " ") // tabs, nbsp, spaces → one space
       .replace(/\n{2,}/g, "\n"); // multiple newlines → single
   }
 }

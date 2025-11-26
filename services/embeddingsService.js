@@ -1,7 +1,7 @@
 import { Document } from '@langchain/core/documents';
 import BaseVectorService from './baseVectorService.js';
 import chunkingService from './chunkingService.js';
-// import preprocessingService from './preprocessingService.js';
+import preprocessingService from './preprocessingService.js';
 import logger from '../utils/logger.js';
 
 /**
@@ -16,8 +16,11 @@ class EmbeddingsService extends BaseVectorService {
    */
   async createEmbeddings(documents, requestId = null) {
     try {
+      // Preprocess documents
+      const processedDocuments = preprocessingService.preprocessDocuments(documents);
+
       // Convert to LangChain Document format
-      const langchainDocuments = documents.map(
+      const langchainDocuments = processedDocuments.map(
         (doc) =>
           new Document({
             pageContent: doc.content,
