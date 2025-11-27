@@ -16,14 +16,14 @@ async function recreateIndex() {
       definition: {
         fields: [
           {
-            type: "vector",
-            path: "embedding",
+            type: 'vector',
+            path: 'embedding',
             numDimensions: 768,
-            similarity: "cosine"
+            similarity: 'cosine'
           },
           {
-            type: "filter",
-            path: "category"
+            type: 'filter',
+            path: 'category'
           }
         ]
       }
@@ -38,7 +38,7 @@ async function recreateIndex() {
     }
 
     // Wait a bit
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     console.log('Creating search index...');
     await collection.createSearchIndex(definition);

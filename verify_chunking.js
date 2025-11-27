@@ -9,7 +9,7 @@ async function verifyChunking() {
   try {
     console.log('Creating large document...');
     // Create a document with > 1000 characters
-    const longText = "This is a sentence. ".repeat(100); 
+    const longText = 'This is a sentence. '.repeat(100); 
     console.log(`Original text length: ${longText.length}`);
 
     const docs = [
